@@ -90,6 +90,8 @@ class UpdateSimPhongThuy extends Command{
 	            $point_center = strip_tags($output_array[0]);
 	            $point_center = str_replace('Tổng điểm: ', '', $point_center);
 	            $end = date('Y-m-d H-i-s');
+
+	            echo "123";
 	               $info->update([
 		              'content'=>$detail_replace_current,
 		              'point_sim'=>$point_center,
