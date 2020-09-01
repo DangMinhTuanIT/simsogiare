@@ -208,6 +208,82 @@ class WebService {
         endif;
           return $html;
     }
+    public function price_range_category_slug2($type='',$slug1 = '',$slug2='')
+    {
+      $html='';
+
+      if($type!='price'):
+      $items = DB::table('sim_price_range')->orderBy('weight','asc')->get();
+      $html.='<div class="search_field">
+             <div id="head-select">
+                <span class="stitle">Chọn khoảng giá:</span>';
+                  if(count($items)>0){
+                    foreach ($items as  $value) {
+                      // check active
+                     $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+                     
+                      $href=route('category.list_slug2',array($slug1,$value->slug));
+                      // truong slug cung truong thi slug2 còn khac thi slug3
+          
+                      $first = DB::table('sim_price_range')->where('slug',$slug2)->first();
+                      if($first){
+                        $href=route('category.list_slug2',array($slug1,$value->slug));
+                      }else{
+                       $href=route('category.list_slug3',array($slug1,$slug2,$value->slug));
+
+                      }
+                      // neu truong hop dang active thi tro ve slug truoc
+                    if($active=='active_rm'){
+                       $href=route('category.list_slug1',array($slug1));
+                    }
+                     $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->name_price_range.'">'.$value->name_price_range.'</a>';
+                    }
+                  }
+                $html.='
+             </div>
+          </div>';
+        endif;
+          return $html;
+    }
+    public function price_range_category_slug3($type='',$slug1 = '',$slug2='',$slug3='')
+    {
+      $html='';
+
+      if($type!='price'):
+      $items = DB::table('sim_price_range')->orderBy('weight','asc')->get();
+      $html.='<div class="search_field">
+             <div id="head-select">
+                <span class="stitle">Chọn khoảng giá:</span>';
+                  if(count($items)>0){
+                    foreach ($items as  $value) {
+                      // check active
+                      $info = DB::table('sim_category_network')->where('slug',$slug1)->first();
+                      if($info):
+                          $active =  (strpos($slug3,$value->slug) !== false) ? 'active_rm' : '';
+                          $href=route('category.list_slug3',array($slug1,$slug2,$value->slug));
+                         // neu truong hop dang active thi tro ve slug truoc
+                          if($active=='active_rm'){
+                             $href=route('category.list_slug2',array($slug1,$slug2));
+                          }
+                      endif;
+                      $info = DB::table('sim_genre')->where('slug',$slug1)->first();
+                      if($info):
+                      $active =  (strpos($slug3,$value->slug) !== false) ? 'active_rm' : '';
+                      $href=route('category.list_slug4',array($slug1,$slug2,$slug3,$value->slug));
+                      // neu truong hop dang active thi tro ve slug truoc
+                    if($active=='active_rm'){
+                       $href=route('category.list_slug3',array($slug1,$slug2,$slug3));
+                    }
+                  endif;
+                     $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->name_price_range.'">'.$value->name_price_range.'</a>';
+                    }
+                  }
+                $html.='
+             </div>
+          </div>';
+        endif;
+          return $html;
+    }
     // chon nha mang
     public function category_network_category($type='',$slug1 = '',$slug2=''){
       $html='';
@@ -221,6 +297,129 @@ class WebService {
                     foreach ($items as  $value) {
                       $href=route('category.list_slug2',array($slug1,$value->slug));
                       $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+                     $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->name_network.'">'.$value->name_network.'</a>';
+                    }
+                  }
+                $html.='
+             </div>
+          </div>';
+        endif;
+          return $html;
+    }
+    public function category_network_category_slug2($type='',$slug1 = '',$slug2=''){
+      $html='';
+      if($type!='category_network'):
+      $items = DB::table('sim_category_network')->where('status',1)->orderBy('weight','asc')->get();
+      $html.='<div class="search_field">
+             <div id="head-select">
+                <span class="stitle">Chọn nhà mạng:</span>';
+                  if(count($items)>0){
+                    foreach ($items as  $value) {
+                      $href=route('category.list_slug2',array($slug1,$value->slug));
+                      $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+                      // truong slug cung truong thi slug2 còn khac thi slug3
+          
+                      $first = DB::table('sim_category_network')->where('slug',$slug2)->first();
+                      if($first){
+                        $href=route('category.list_slug2',array($slug1,$value->slug));
+                      }else{
+                       $href=route('category.list_slug3',array($slug1,$value->slug,$slug2));
+
+                      }
+                      // neu truong hop dang active thi tro ve slug truoc
+                      if($active=='active_rm'){
+                         $href=route('category.list_slug1',array($slug1));
+                      }
+                     $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->name_network.'">'.$value->name_network.'</a>';
+                    }
+                  }
+                $html.='
+             </div>
+          </div>';
+        endif;
+          return $html;
+    }
+    public function slug4_list_filter($type='',$slug1 = '',$slug2='',$slug3='',$slug4){
+      $html='';
+    $info=  DB::table('sim_category_network')->where('slug',$slug2)->first();
+     $items = DB::table('sim_section')->where('status',1)->where('parent_id',0)->where('id_category','!=',6)->groupBy('number_section')->orderBy('number_section','desc');
+        if($info->id!=0){
+         $items = $items->where('id_category',$info->id)->get();
+        }else{
+          $items = $items->get();
+        }
+        $html.='<div class="search_field">
+             <div id="head-select">
+                <span class="stitle">Đầu số:</span>';
+            if(!empty($items)){
+              foreach ($items as $value) {
+                $href = route('category.list_slug2',array($slug1,$slug2,$value->slug,$slug4));
+               $active =  (strpos($slug3,$value->slug) !== false) ? 'active_rm' : '';
+             
+                $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->number_section.'">'.$value->number_section.'</a>';
+              }
+            }
+           $html.='
+             </div>
+          </div>';
+          $items = DB::table('sim_category_network')->where('status',1)->orderBy('weight','asc')->get();
+          $html.='<div class="search_field">
+             <div id="head-select">
+                <span class="stitle">Chọn nhà mạng:</span>';
+                  if(count($items)>0){
+                    foreach ($items as  $value) {
+                      $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+                       $href=route('category.list_slug4',array($slug1,$value->slug,$slug3,$slug4));
+                      // neu truong hop dang active thi tro ve slug truoc
+                      if($active=='active_rm'){
+                         $href=route('category.list_slug3',array($slug1,$slug2,$slug3));
+                      }
+                     $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->name_network.'">'.$value->name_network.'</a>';
+                    }
+                  }
+                $html.='
+             </div>
+          </div>';
+
+$items = DB::table('sim_price_range')->orderBy('weight','asc')->get();
+      $html.='<div class="search_field">
+             <div id="head-select">
+                <span class="stitle">Chọn khoảng giá:</span>';
+                  if(count($items)>0){
+                    foreach ($items as  $value) {
+                      // check active
+                      $active =  (strpos($slug4,$value->slug) !== false) ? 'active_rm' : '';
+                      $href=route('category.list_slug4',array($slug1,$slug2,$slug3,$value->slug));
+                      // neu truong hop dang active thi tro ve slug truoc
+                      if($active=='active_rm'){
+                         $href=route('category.list_slug3',array($slug1,$slug2,$slug3));
+                      }
+                      $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->name_price_range.'">'.$value->name_price_range.'</a>';
+                    }
+                  }
+                $html.='
+             </div>
+          </div>';
+          return $html;
+    }
+    public function category_network_category_slug3($type='',$slug1 = '',$slug2='',$slug3=''){
+      $html='';
+      if($type!='category_network'):
+      $items = DB::table('sim_category_network')->where('status',1)->orderBy('weight','asc')->get();
+      $html.='<div class="search_field">
+             <div id="head-select">
+                <span class="stitle">Chọn nhà mạng:</span>';
+                  if(count($items)>0){
+                    foreach ($items as  $value) {
+                      $href=route('category.list_slug2',array($slug1,$value->slug));
+                      $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+                      if($slug2!=''){
+                         $href=route('category.list_slug3',array($slug1,$value->slug,$slug3));
+                      }
+                      // neu truong hop dang active thi tro ve slug truoc
+                      if($active=='active_rm'){
+                         $href=route('category.list_slug2',array($slug1,$slug2));
+                      }
                      $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->name_network.'">'.$value->name_network.'</a>';
                     }
                   }
@@ -248,6 +447,176 @@ class WebService {
                   </div></div>';
       }
       
+      return $html;
+    }
+    public function dauso_first_name($type='',$slug_cat="",$id_category="",$slug1='',$slug2=''){
+      $html='';
+      if($type=='category_price_range' || $type=='category_genre'){
+        // lay items cua cac dau so neu hien thi trong trang loai gia
+        $items = DB::table('sim_section')->where('status',1)->where('parent_id',0)->where('id_category','!=',6)->groupBy('number_section')->orderBy('number_section','desc')->get();
+        
+    }else if($type=='category_network'){
+      $items = DB::table('sim_section')->where('status',1)->where('id_category',$id_category)->where('parent_id',0)->where('id_category','!=',6)->groupBy('number_section')->orderBy('number_section','desc')->get();
+    }
+    
+     if(!empty($items)){
+        $html.='<div class="search_field">
+    <div id="head-select">
+      <span class="stitle">Chọn đầu số:</span>';
+      foreach ($items as $key => $value) {
+        $href=route('category.list_slug2',array($slug1,$value->slug));
+         $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+       $html.='<a class="'.$active.'" href="'.$href.'" class="" title="'.$value->number_section.'">'.$value->number_section.'</a>';
+      }
+        $html.='
+      </div> 
+</div>';
+      }
+      return $html;
+    }
+    public function dauso_slug2_first_name($type='',$slug_cat="",$id_category="",$slug1='',$slug2=''){
+      $html='';
+      $items = DB::table('sim_section')->where('status',1)->where('parent_id',0)->where('id_category','!=',6)->groupBy('number_section')->orderBy('number_section','desc');
+        if($id_category!=0){
+         $items = $items->where('id_category',$id_category)->get();
+        }else{
+          $items = $items->get();
+        }
+     if(!empty($items)){
+        $html.='<div class="search_field">
+    <div id="head-select">
+      <span class="stitle">Chọn đầu số:</span>';
+      foreach ($items as $key => $value) {
+        $info = DB::table('sim_category_network')->where('slug',$slug1)->first();
+        if($info):
+          $href=route('category.list_slug2',array($slug1,$value->slug));
+          $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+          // truong slug cung truong thi slug2 còn khac thi slug3
+
+          $first = DB::table('sim_section')->where('slug',$slug2)->first();
+          if($first){
+            $href=route('category.list_slug2',array($slug1,$value->slug));
+          }else{
+           $href=route('category.list_slug3',array($slug1,$value->slug,$slug2));
+
+          }
+          // neu truong hop dang active thi tro ve slug truoc
+          if($active=='active_rm'){
+             $href=route('category.list_slug1',array($slug1));
+          }
+        endif;
+        $info = DB::table('sim_price_range')->where('slug',$slug1)->first();
+        if($info):
+          $href=route('category.list_slug2',array($slug1,$value->slug));
+          $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+          // truong slug cung truong thi slug2 còn khac thi slug3
+
+          $first = DB::table('sim_section')->where('slug',$slug2)->first();
+          if($first){
+            $href=route('category.list_slug2',array($slug1,$value->slug));
+          }else{
+           $href=route('category.list_slug3',array($slug1,$slug2,$value->slug));
+
+          }
+          // neu truong hop dang active thi tro ve slug truoc
+          if($active=='active_rm'){
+             $href=route('category.list_slug1',array($slug1));
+          }
+        endif;
+        $info = DB::table('sim_genre')->where('slug',$slug1)->first();
+        if($info):
+          $href=route('category.list_slug2',array($slug1,$value->slug));
+          $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+          // truong slug cung truong thi slug2 còn khac thi slug3
+
+          $first = DB::table('sim_section')->where('slug',$slug2)->first();
+          if($first){
+            $href=route('category.list_slug2',array($slug1,$value->slug));
+          }else{
+           $href=route('category.list_slug3',array($slug1,$slug2,$value->slug));
+
+          }
+          // neu truong hop dang active thi tro ve slug truoc
+          if($active=='active_rm'){
+             $href=route('category.list_slug1',array($slug1));
+          }
+        endif;
+         $html.='<a class="'.$active.'" href="'.$href.'" class="" title="'.$value->number_section.'">'.$value->number_section.'</a>';
+        }
+        $html.='
+      </div> 
+</div>';
+      }
+      return $html;
+    }
+    public function dauso_slug3_first_name($type='',$slug_cat="",$id_category="",$slug1='',$slug2='',$slug3=''){
+      $html='';
+      $items = DB::table('sim_section')->where('status',1)->where('parent_id',0)->where('id_category','!=',6)->groupBy('number_section')->orderBy('number_section','desc');
+        if($id_category!=0){
+         $items = $items->where('id_category',$id_category)->get();
+        }else{
+          $items = $items->get();
+        }
+     if(!empty($items)){
+        $html.='<div class="search_field">
+          <div id="head-select">
+            <span class="stitle">Chọn đầu số:</span>';
+            foreach ($items as $key => $value) {
+              // truong hop sim viettel
+             $category = DB::table('sim_category_network')->where('slug',$slug1)->first();
+             if($category):
+              $href=route('category.list_slug2',array($slug1,$value->slug));
+                $info = DB::table('sim_section')->where('slug',$slug2)->first();
+                if($info):
+                  $active =  (strpos($slug2,$value->slug) !== false) ? 'active_rm' : '';
+                   $href=route('category.list_slug3',array($slug1,$value->slug,$slug3));
+                  // neu truong hop dang active thi tro ve slug truoc
+                  if($active=='active_rm'){
+                     $href=route('category.list_slug2',array($slug1,$slug3));
+                  }
+                endif;
+                $info = DB::table('sim_section')->where('slug',$slug3)->first();
+                if($info){
+                  $active =  (strpos($slug3,$value->slug) !== false) ? 'active_rm' : '';
+                   $href=route('category.list_slug3',array($slug1,$value->slug,$slug3));
+                  if($active=='active_rm'){
+                    $href=route('category.list_slug2',array($slug1,$slug2));
+                  }
+                  
+                }
+              endif;
+              $category = DB::table('sim_price_range')->where('slug',$slug1)->first();
+             if($category):
+                $info = DB::table('sim_section')->where('slug',$slug3)->first();
+                if($info){
+                  $active =  (strpos($slug3,$value->slug) !== false) ? 'active_rm' : '';
+                  $href=route('category.list_slug3',array($slug1,$slug2,$value->slug));
+                  if($active=='active_rm'){
+                   $href=route('category.list_slug2',array($slug1,$slug2));
+                    
+                  }
+                  
+                }
+              endif;
+          $category = DB::table('sim_genre')->where('slug',$slug1)->first();
+             if($category):
+                $info = DB::table('sim_section')->where('slug',$slug3)->first();
+                if($info){
+                  $active =  (strpos($slug3,$value->slug) !== false) ? 'active_rm' : '';
+                  $href=route('category.list_slug3',array($slug1,$slug2,$value->slug));
+                  if($active=='active_rm'){
+                   $href=route('category.list_slug2',array($slug1,$slug2));
+                    
+                  }
+                  
+                }
+              endif;
+               $html.='<a class="'.$active.'" href="'.$href.'" class="" title="'.$value->number_section.'">'.$value->number_section.'</a>';
+              }
+              $html.='
+            </div> 
+      </div>';
+      }
       return $html;
     }
     // search sim theo dau, duoim giua

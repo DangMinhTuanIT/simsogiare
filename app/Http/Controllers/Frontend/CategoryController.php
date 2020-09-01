@@ -67,6 +67,7 @@ class CategoryController extends Controller
         //
         $dauso_id = 0;
         $slug_cat = '';
+        $id_category = 0;
         $type_sidebar = 1;
         $filter_according = '';
         $info_price = DB::table('sim_price_range')->where('slug',$slug1)->first();
@@ -85,6 +86,7 @@ class CategoryController extends Controller
             }
             $type = 'category_network';
             $category = $info_category_network;
+            $id_category = $info_category_network->id;
             $name_cat = $category->name_network;
             // dau so chi di theo nha mang
             $dauso_id = $category->id;
@@ -132,6 +134,7 @@ class CategoryController extends Controller
             'data_sim'=>$items,
             'type'=>$type,
             'dauso_id'=>$dauso_id,
+            'id_category'=>$id_category,
             'type_sidebar'=>$type_sidebar,
             'slug_cat'=>$slug_cat,
             'filter_according'=>$filter_according,
@@ -146,6 +149,7 @@ class CategoryController extends Controller
         $dauso_id = 0;
         $slug_cat = '';
         $type_sidebar = 1;
+        $id_category = 0;
         $filter_according = '';
         $info_price = DB::table('sim_price_range')->where('slug',$slug1)->first();
             //truong hop la nha mang
@@ -164,6 +168,7 @@ class CategoryController extends Controller
             $type = 'category_network';
             $category = $info_category_network;
             $name_cat = $category->name_network;
+           $id_category = $info_category_network->id;
             // dau so chi di theo nha mang
             $dauso_id = $category->id;
              $slug_cat = $category->slug;
@@ -180,6 +185,10 @@ class CategoryController extends Controller
             }else if($slug1){
                 $items = Sim::category_price_range_filter($slug1,$slug2);
             }
+             $info_category_network = DB::table('sim_category_network')->where('slug',$slug2)->first();
+             if($info_category_network){
+                 $id_category = $info_category_network->id;
+             }
             $type = 'category_price_range';
             $category = $info_price;
             $name_cat = $category->name_price_range;
@@ -196,6 +205,10 @@ class CategoryController extends Controller
             }else if($slug1){
                 $items = Sim::category_genre_filter($slug1,$slug2);
             }
+            $info_category_network = DB::table('sim_category_network')->where('slug',$slug2)->first();
+            if($info_category_network){
+                 $id_category = $info_category_network->id;
+            }
            $type = 'category_genre';
            $category = $info_genre;
            $name_cat = $category->name_genre;
@@ -204,9 +217,10 @@ class CategoryController extends Controller
         }
         // truong hop la gia
         // truong hop la
-        return view('frontend.category.index')->with([
+        return view('frontend.category.index_slug2')->with([
             'data_sim'=>$items,
             'type'=>$type,
+            'id_category'=>$id_category,
             'dauso_id'=>$dauso_id,
             'type_sidebar'=>$type_sidebar,
             'slug_cat'=>$slug_cat,
@@ -216,12 +230,13 @@ class CategoryController extends Controller
             'category'=>$category,
             'name_cat'=>$name_cat]);
 	}
-	public function category_detail3slug($slug1,$slug2,$slug3,$slug4){
-// truong hop la genre
+	public function category_detail3slug($slug1,$slug2,$slug3){
+        // truong hop la genre
         $info_category_network = DB::table('sim_category_network')->where('slug',$slug1)->first();
         //
         $dauso_id = 0;
         $slug_cat = '';
+        $id_category= 0;
         $type_sidebar = 1;
         $filter_according = '';
         $info_price = DB::table('sim_price_range')->where('slug',$slug1)->first();
@@ -235,6 +250,10 @@ class CategoryController extends Controller
             // dau so chi di theo nha mang
             $dauso_id = $category->id;
              $slug_cat = $category->slug;
+             $info_category_network = DB::table('sim_category_network')->where('slug',$slug1)->first();
+            if($info_category_network){
+                 $id_category = $info_category_network->id;
+            }
 
              $filter_according = 'category_network';
             // category theo gia
@@ -248,22 +267,28 @@ class CategoryController extends Controller
         }else if ($info_genre || !empty($info_genre)){
            $items = Sim::category_genre($slug1);
            $type = 'category_genre';
+           $info_category_network = DB::table('sim_category_network')->where('slug',$slug2)->first();
+            if($info_category_network){
+                 $id_category = $info_category_network->id;
+            }
            $category = $info_genre;
            $name_cat = $category->name_genre;
         }else{
             return view('frontend.404');
         }
-        
         // truong hop la gia
         // truong hop la
-        return view('frontend.category.index')->with([
+        return view('frontend.category.index_slug3')->with([
             'data_sim'=>$items,
             'type'=>$type,
             'dauso_id'=>$dauso_id,
+            'id_category'=>$id_category,
             'type_sidebar'=>$type_sidebar,
             'slug_cat'=>$slug_cat,
             'filter_according'=>$filter_according,
             'slug1'=>$slug1,
+            'slug2'=>$slug2,
+            'slug3'=>$slug3,
             'category'=>$category,
             'name_cat'=>$name_cat]);
 	}
@@ -307,10 +332,14 @@ class CategoryController extends Controller
         
         // truong hop la gia
         // truong hop la
-        return view('frontend.category.index')->with([
+        return view('frontend.category.index_slug4')->with([
             'data_sim'=>$items,
             'type'=>$type,
             'dauso_id'=>$dauso_id,
+            'slug1'=>$slug1,
+            'slug2'=>$slug2,
+            'slug3'=>$slug3,
+            'slug4'=>$slug4,
             'type_sidebar'=>$type_sidebar,
             'slug_cat'=>$slug_cat,
             'filter_according'=>$filter_according,

@@ -194,7 +194,7 @@ class Sim extends Model{
        }else if($order_type=='order'){
            $items = $items
        ->where('a.number_sim','like',$dau.'%')
-       ->where('a.number_sim','like','%'.$duoi)->paginate(50);
+       ->where('a.number_sim','like','%'.$duoi)->orderBy(DB::raw('RAND()'))->paginate(50);
        // truong hop search va order theo gia
        }else if($order_type=='price'){
            $items = $items->orderBy('a.price',$order)
@@ -221,7 +221,7 @@ class Sim extends Model{
        ->select('a.*','b.name_network','d.name_genre','d.regex','b.image as image_cat',DB::raw('min(d.id) as id_genre_min'));
        // truong hop  order random
        if($order_type=='order'){
-           $items = $items->where('b.slug',$slug)->paginate(50);
+           $items = $items->where('b.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
        // truong hop  order theo gia
        }else if($order_type=='price'){
            $items = $items->orderBy('a.price',$order)
@@ -247,7 +247,7 @@ class Sim extends Model{
        // truong hop  order random
        if($order_type=='order'){
            $items = $items->where('d.slug',$slug2)
-       ->where('b.slug',$slug)->paginate(50);
+       ->where('b.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
        // truong hop  order theo gia
        }else if($order_type=='price'){
            $items = $items->orderBy('a.price',$order)
@@ -270,7 +270,7 @@ class Sim extends Model{
            // truong hop  order random
            if($order_type=='order'){
                $items = $items->where('e.slug',$slug2)
-           ->where('b.slug',$slug)->paginate(50);
+           ->where('b.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
            // truong hop  order theo gia
            }else if($order_type=='price'){
                $items = $items->orderBy('a.price',$order)
@@ -285,23 +285,23 @@ class Sim extends Model{
        $th3 = DB::table('sim_section')->where('slug',$slug2)->first();
        //truong hop 2 theo gia
        if($th3 && !empty($th3)){
+        $number_section = $th3->number_section;
          $items = DB::table('sim as a')->join('sim_category_network as b','b.id','=','a.id_category_network')
        ->join('join_sim_genre as c','a.id','=','c.id_sim')->join('sim_genre as d','c.id_genre','=','d.id')
        ->join('sim_price_range as e','e.id','=','a.id_price_range')->join('sim_section as f','f.id','=','a.id_section')
        ->groupBy('a.id')
+       ->where('a.number_sim','like',$number_section.'%')
        ->select('a.*','b.name_network','d.name_genre','d.regex','b.image as image_cat',DB::raw('min(d.id) as id_genre_min'));
            // truong hop  order random
            if($order_type=='order'){
-               $items = $items->where('f.slug',$slug2)
-           ->where('b.slug',$slug)->paginate(50);
+               $items = $items
+           ->where('b.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
            // truong hop  order theo gia
            }else if($order_type=='price'){
                $items = $items->orderBy('a.price',$order)
-              ->where('f.slug',$slug2)
            ->where('b.slug',$slug)->paginate(50);
            }else{
               $items = $items->orderBy('d.id','desc')
-              ->where('f.slug',$slug2)
            ->where('b.slug',$slug)->paginate(50);
            }
        }
@@ -318,7 +318,7 @@ class Sim extends Model{
        ->select('a.*','b.name_network','d.name_genre','d.regex','b.image as image_cat',DB::raw('min(d.id) as id_genre_min'));
        // truong hop  order random
        if($order_type=='order'){
-           $items = $items->where('d.slug',$slug)->paginate(50);
+           $items = $items->where('d.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
        // truong hop  order theo gia
        }else if($order_type=='price'){
            $items = $items->orderBy('a.price',$order)
@@ -344,7 +344,7 @@ class Sim extends Model{
             // truong hop  order random
            if($order_type=='order'){
                $items = $items->where('b.slug',$slug2)
-              ->where('d.slug',$slug)->paginate(50);
+              ->where('d.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
            // truong hop  order theo gia
            }else if($order_type=='price'){
                $items = $items->orderBy('a.price',$order)
@@ -368,7 +368,7 @@ class Sim extends Model{
           // truong hop  order random
            if($order_type=='order'){
                $items = $items->where('e.slug',$slug2)
-              ->where('d.slug',$slug)->paginate(50);
+              ->where('d.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
            // truong hop  order theo gia
            }else if($order_type=='price'){
                $items = $items->orderBy('a.price',$order)
@@ -378,6 +378,29 @@ class Sim extends Model{
               $items = $items->orderBy('d.id','desc')
              ->where('e.slug',$slug2)
               ->where('d.slug',$slug)->paginate(50);
+           }
+       }
+        $th3 = DB::table('sim_section')->where('slug',$slug2)->first();
+       //truong hop 2 theo gia
+       if($th3 && !empty($th3)){
+        $number_section = $th3->number_section;
+         $items = DB::table('sim as a')->join('sim_category_network as b','b.id','=','a.id_category_network')
+       ->join('join_sim_genre as c','a.id','=','c.id_sim')->join('sim_genre as d','c.id_genre','=','d.id')
+       ->join('sim_price_range as e','e.id','=','a.id_price_range')
+       ->groupBy('a.id')
+       ->where('a.number_sim','like',$number_section.'%')
+       ->select('a.*','b.name_network','d.name_genre','d.regex','b.image as image_cat',DB::raw('min(d.id) as id_genre_min'));
+           // truong hop  order random
+           if($order_type=='order'){
+               $items = $items
+           ->where('d.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
+           // truong hop  order theo gia
+           }else if($order_type=='price'){
+               $items = $items->orderBy('a.price',$order)
+           ->where('d.slug',$slug)->paginate(50);
+           }else{
+              $items = $items->orderBy('d.id','desc')
+           ->where('d.slug',$slug)->paginate(50);
            }
        }
        return $items;
@@ -393,7 +416,7 @@ class Sim extends Model{
        ->select('a.*','b.name_network','d.name_genre','d.regex','b.image as image_cat',DB::raw('min(d.id) as id_genre_min'));
         // truong hop  order random
        if($order_type=='order'){
-           $items = $items->where('e.slug',$slug)->paginate(50);
+           $items = $items->where('e.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
        // truong hop  order theo gia
        }else if($order_type=='price'){
            $items = $items->orderBy('a.price',$order)
@@ -419,7 +442,7 @@ class Sim extends Model{
             // truong hop  order random
            if($order_type=='order'){
                $items = $items->where('b.slug',$slug2)
-              ->where('e.slug',$slug)->paginate(50);
+              ->where('e.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
            // truong hop  order theo gia
            }else if($order_type=='price'){
                $items = $items->orderBy('a.price',$order)
@@ -455,6 +478,30 @@ class Sim extends Model{
               $items = $items->orderBy('d.id','desc')
               ->where('e.slug',$slug2)
               ->where('d.slug',$slug)->paginate(50);
+           }
+       }
+       $th3 = DB::table('sim_section')->where('slug',$slug2)->first();
+       //truong hop 2 chon dau so
+       if($th3 && !empty($th3)){
+        $number_section = $th3->number_section;
+          $items = DB::table('sim as a')->join('sim_category_network as b','b.id','=','a.id_category_network')
+       ->join('join_sim_genre as c','a.id','=','c.id_sim')->join('sim_genre as d','c.id_genre','=','d.id')
+       ->join('sim_price_range as e','e.id','=','a.id_price_range')
+       ->where('a.number_sim','like',$number_section.'%')
+       ->groupBy('a.id')
+       ->select('a.*','b.name_network','d.name_genre','d.regex','b.image as image_cat',DB::raw('min(d.id) as id_genre_min'));
+       
+
+        // truong hop  order random
+           if($order_type=='order'){
+               $items = $items->where('e.slug',$slug)->orderBy(DB::raw('RAND()'))->paginate(50);
+           // truong hop  order theo gia
+           }else if($order_type=='price'){
+               $items = $items->orderBy('a.price',$order)
+              ->where('e.slug',$slug)->paginate(50);
+           }else{
+              $items = $items->orderBy('d.id','desc')
+              ->where('e.slug',$slug)->paginate(50);
            }
        }
        return $items;

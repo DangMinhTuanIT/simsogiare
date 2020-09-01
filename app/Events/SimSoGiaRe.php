@@ -12,6 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class SimSoGiaRe
 {
+    
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $obj;
 

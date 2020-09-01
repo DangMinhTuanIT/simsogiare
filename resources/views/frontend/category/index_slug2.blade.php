@@ -45,9 +45,9 @@ $desc = \App\myHelper::get_option_seo('seo-description-add','text');
                   <div class="title_filter">	Lọc sim theo yêu cầu</div>
                   <div class="block-search">
                      <div class="sims_select_filter">
-                      {!!WebService::dauso_first_name($type,@$slug_cat,@$id_category,@$slug1,@$slug2)!!}
-                       {!!WebService::category_network_category(@$filter_according,@$slug1,@$slug2)!!}
-                        {!!WebService::price_range_category(@$filter_according,@$slug1,@$slug2)!!}
+                      {!!WebService::dauso_slug2_first_name($type,@$slug_cat,@$id_category,@$slug1,@$slug2)!!}
+                       {!!WebService::category_network_category_slug2(@$filter_according,@$slug1,@$slug2)!!}
+                        {!!WebService::price_range_category_slug2(@$filter_according,@$slug1,@$slug2)!!}
                         <!-- end .sims_price sub_block	-->
                      </div>
                      <div class="clear"></div>
