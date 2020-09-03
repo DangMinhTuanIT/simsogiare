@@ -47,6 +47,49 @@ class Sim extends Model{
        ->where('a.slug',$slug)->first();
        return $items;
     }
+    // sim phong thuy
+    public static function simphongthuy_hopmenh(){
+      $items = null;
+       $items = DB::table('sim as a')->join('sim_category_network as b','b.id','=','a.id_category_network')
+       ->join('join_sim_genre as c','a.id','=','c.id_sim')->join('sim_genre as d','c.id_genre','=','d.id')
+       ->join('sim_price_range as e','e.id','=','a.id_price_range')
+       ->groupBy('a.id')
+       ->select('a.*','b.name_network','d.name_genre','d.slug as slug_genre','b.image as image_cat','d.regex',DB::raw('min(d.id) as id_genre_min'));
+       $items = $items->where('a.point_sim','>=',6)
+       ->orderBy('a.point_sim','desc')
+       ->orderBy('a.price','desc')
+       ->orderBy('e.id','desc')
+       ->orderBy('d.id','desc')->paginate(50);
+       return $items;
+    }
+    public static function simphongthuy_hopnamsinh(){
+      $items = null;
+       $items = DB::table('sim as a')->join('sim_category_network as b','b.id','=','a.id_category_network')
+       ->join('join_sim_genre as c','a.id','=','c.id_sim')->join('sim_genre as d','c.id_genre','=','d.id')
+       ->join('sim_price_range as e','e.id','=','a.id_price_range')
+       ->groupBy('a.id')
+       ->select('a.*','b.name_network','d.name_genre','d.slug as slug_genre','b.image as image_cat','d.regex',DB::raw('min(d.id) as id_genre_min'));
+       $items = $items->where('a.point_sim','>=',6)
+       ->orderBy('a.point_sim','desc')
+       ->orderBy('a.price','desc')
+       ->orderBy('e.id','desc')
+       ->orderBy('d.id','desc')->paginate(50);
+       return $items;
+    }
+    public static function simphongthuy_hoptuoi(){
+      $items = null;
+       $items = DB::table('sim as a')->join('sim_category_network as b','b.id','=','a.id_category_network')
+       ->join('join_sim_genre as c','a.id','=','c.id_sim')->join('sim_genre as d','c.id_genre','=','d.id')
+       ->join('sim_price_range as e','e.id','=','a.id_price_range')
+       ->groupBy('a.id')
+       ->select('a.*','b.name_network','d.name_genre','d.slug as slug_genre','b.image as image_cat','d.regex',DB::raw('min(d.id) as id_genre_min'));
+       $items = $items->where('a.point_sim','>=',6)
+       ->orderBy('a.point_sim','desc')
+       ->orderBy('a.price','desc')
+       ->orderBy('e.id','desc')
+       ->orderBy('d.id','desc')->paginate(50);
+       return $items;
+    }
     // search so duoi sim
     public static function search_sim_duoi($num,$type='',$string='',$order_type='',$order=''){
         $items = null;

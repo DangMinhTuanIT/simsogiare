@@ -131,7 +131,24 @@
                            </a>
                            <span class="mb_arrow closed"></span>
                         </li>
-                       
+                       <li class="level_0  "  id="menu-Gmobile">
+                           <a   href="sim-gmobile.html"  title="Gmobile">
+                           <span class="icon_svg cls">
+                           <img class="icon_img"  src="home/sim-gmobile.png" width="22" alt="Gmobile"  />
+                           </span>
+                           <span class="visible-xs visible-sm ">Gmobile</span>
+                           </a>
+                           <span class="mb_arrow closed"></span>
+                        </li>
+                        <li class="level_0  "  id="menu-Itelecom ">
+                           <a   href="sim-itelecom.html"  title="Itelecom ">
+                           <span class="icon_svg cls">
+                           <img class="icon_img"  src="home/itelecom-icon-v3.png" width="22" alt="Itelecom "  />
+                           </span>
+                           <span class="visible-xs visible-sm ">Itelecom </span>
+                           </a>
+                           <span class="mb_arrow closed"></span>
+                        </li>
                         <li class="level_0  "  id="menu-sim-phong-thuy">
                            <a   href="sim-phong-thuy.html"  title="Sim phong thuỷ">
                            <span class="icon_svg cls">

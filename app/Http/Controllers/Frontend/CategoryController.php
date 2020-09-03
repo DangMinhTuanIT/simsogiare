@@ -73,6 +73,8 @@ class CategoryController extends Controller
         $info_price = DB::table('sim_price_range')->where('slug',$slug1)->first();
     		//truong hop la nha mang
     	$info_genre = DB::table('sim_genre')->where('slug',$slug1)->first();
+        // sim phong thuy hop menh
+        $info_sim_fate = DB::table('sim_fate')->where('slug',$slug1)->first();
     	if($info_category_network || !empty($info_category_network)){
             // order by
             if(@($_GET['order'])){
@@ -124,7 +126,23 @@ class CategoryController extends Controller
            $type = 'category_genre';
            $category = $info_genre;
            $name_cat = $category->name_genre;
-    	}else{
+    	}else if($info_sim_fate || !empty($info_sim_fate)){
+            // order by
+            if(@($_GET['order'])){
+                 $items = Sim::category_price_range($slug1,'order',$_GET['order']);
+                 // order theo gia va string la the loai
+            }else if(@($_GET['price'])){
+                 $items = Sim::category_price_range($slug1,'price',$_GET['price']);
+                 // string la the loai
+            }else if($slug1){
+                $items = Sim::category_price_range($slug1);
+            }
+            $items = '';
+            return view('frontend.simphongthuy.hopmenh.index')->with([
+            'data_sim'=>$items,
+            ]);
+            // category theo the loai
+        }else{
             return view('frontend.404');
         }
     	

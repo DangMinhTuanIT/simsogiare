@@ -304,7 +304,8 @@ Route::group(['prefix' => 'admin', 'middleware' => [
     });
 
 });
-    Route::pattern('string', '([A-Za-z0-9_-]+)');
+Route::pattern('string', '([A-Za-z0-9_-]+)');
+   Route::pattern('num', '([0-9]+)');
 Route::get('sim-phong-thuy.html', array(
                     'as' => 'home.simphongthuy',
                     'uses' => 'Frontend\SimPhongThuyController@simphongthuy')
@@ -312,6 +313,10 @@ Route::get('sim-phong-thuy.html', array(
 Route::get('sim-phong-thuy/{string}.html', array(
                     'as' => 'home.sim_phong_thuy_filter',
                     'uses' => 'Frontend\SimPhongThuyController@sim_phong_thuy_filter')
+            );
+Route::get('sim-phong-thuy/dien-giai-{num}/{string}.html', array(
+                    'as' => 'home.diengiai_simphongthuy',
+                    'uses' => 'Frontend\SimPhongThuyController@diengiai_simphongthuy')
             );
 Route::get('check_sim_phong_thuy', array(
                     'as' => 'home.check_sim_phong_thuy',
@@ -353,10 +358,12 @@ Route::get('/sim-duoi-so-{num}-dau-{num2}/{string}.html', array(
                     'as' => 'search.search_sim_giua_theloai',
                     'uses' => 'Frontend\SearchController@search_sim_giua_theloai')
             );
+// trang
 Route::get('/{string}-sb{num}.html', array(
                     'as' => 'page.list_slug1',
                     'uses' => 'Frontend\PageController@single')
             )->where('any', '(.*)\/$');
+// tin tuc
 Route::get('/{string}-n{num}.html', array(
                     'as' => 'news.list_slug1',
                     'uses' => 'Frontend\NewsController@single')

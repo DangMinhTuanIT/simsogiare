@@ -23,13 +23,82 @@ class SimPhongThuyController extends Controller
             'data_sim'=>$items,
         ]);
    }  
+   // dien giai sim phong thuy
+   public function diengiai_simphongthuy(Request $request,$number,$string){
+        $info =  DB::table('sim')->where('number_sim',$number)->first();
+       if($info){
+            return view('frontend.simphongthuy.diengiaisim.index')->with([
+                'info'=>$info,
+                'phone'=>$number
+            ]);
+       }else{
+            return view('frontend.404');
+       }
+   }
    public function sim_phong_thuy_filter(Request $request,$string){
+       
+       // sim hop tuoi
+      $sim_age_info =  DB::table('sim_age')->where('slug',$string)->first();
+        $sim_year_info =  DB::table('sim_year')->where('slug',$string)->first();
+        $info_sim_fate = DB::table('sim_fate')->where('slug',$string)->first();
         $arr_string = explode('-', $string);
-       echo $day = $arr_string[0];
-      echo  $month = $arr_string[1];
-      echo  $year = $arr_string[2];
-      echo  $gender = $arr_string[3];
-       echo $giosinh = $arr_string[4];
+      if($sim_age_info){
+        $type = '';
+        $items = Sim::simphongthuy_hoptuoi();
+        return view('frontend.simphongthuy.hoptuoi.index')->with([
+            'info'=>$sim_age_info,
+            'data_sim'=>$items,
+            'type'=>$type
+        ]);
+      }else if($sim_year_info){
+       $items = Sim::simphongthuy_hopnamsinh();
+       $type = 'nam-sinh-'.$sim_year_info->number_sim_year;
+        return view('frontend.simphongthuy.hopnamsinh.index')->with([
+            'info'=>$sim_year_info,
+            'data_sim'=>$items,
+            'type'=>$type
+        ]);
+      }else if($info_sim_fate){
+        $slug = $info_sim_fate->slug;
+        $type = str_replace('sim-hop-', '', $slug);
+        $items = Sim::simphongthuy_hopmenh();
+        return view('frontend.simphongthuy.hopmenh.index')->with([
+            'info'=>$info_sim_fate,
+            'data_sim'=>$items,
+            'type'=>$type
+        ]);
+      }else if(count($arr_string)>0){
+         // check du lieu
+        $day = $arr_string[0];
+        $month = $arr_string[1];
+        $year = $arr_string[2];
+        $gender = $arr_string[3];
+        $giosinh = $arr_string[4];
+        // get dữ liệu về
+        $client = new Client();
+        $client->setClient(new GuzzleClient(array(
+                // DISABLE SSL CERTIFICATE CHECK
+                'verify' => false,
+            )));
+        $link = 'https://muasim.com.vn/sim-phong-thuy/'.$day.'-'.$month.'-'.$year.'-'.$gender.'-'.$giosinh.'.html';
+        $crawler = $client->request('GET',$link);
+        $client->setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36');
+        $client->setHeader('Referer', 'https://muasim.com.vn/sim-phong-thuy/01-01-1959-nam-0.html');
+        $client->setHeader('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9');
+          $detail_replace = $crawler->filter('.ngu_hanh')->eq('0')->html();
+            $simslist_block_title = $crawler->filter('.simslist_block_title')->eq('0')->html();
+        return view('frontend.simphongthuy.search.index')->with([
+                'ngu_hanh'=>$detail_replace,
+                'day'=>$day,
+                'month'=>$month,
+                'year'=>$year,
+                'gender'=>$gender,
+                'giosinh'=>$giosinh,
+                'simslist_block_title'=>$simslist_block_title,
+            ]);
+      } else{
+        return view('frontend.404');
+      }
    }
    public function check_sim_phong_thuy(Request $request){
         if(!Storage::disk('public')->exists('/upload')){

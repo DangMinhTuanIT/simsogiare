@@ -44,11 +44,7 @@
                      <div class="form-group">
                         <label><label for="type_sidebar">Sidebar</label></label>
                         <select id="type_sidebar" name="type_sidebar" class="form-control">
-                            @php $type_sidebar = array(
-                            'sim_tao_thuong_hieu'=>'Sim Tạo Thương Hiệu',
-                            'sim_vip_doanh_nhan'=>'Sim Vip Doanh Nhân',
-                            'sim_sinh_tai_loc'=>'Sim Sinh Tài Lộc',
-                            ); @endphp
+                            @php $type_sidebar = config('simsogiare.type_sidebar') @endphp
                             @foreach($type_sidebar as $key => $item)
                             @php $active = old('type_sidebar')==$key ? 'selected="selected"' : '' @endphp
                             <option {{$active}} value="{{$key}}">{{$item}}</option>

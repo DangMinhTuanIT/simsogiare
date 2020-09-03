@@ -27,7 +27,7 @@ class UpdateSimPhongThuy extends Command{
     	if(!Storage::disk('public')->exists('/upload')){
 	            Storage::disk('public')->makeDirectory('upload/');
 	        }
-    	$items = DB::table('sim')->limit(20000)->get();
+    	$items = DB::table('sim')->whereNull('content')->limit(5000)->get();
     	foreach ($items as $item_sim) {
     		try {
     			$start = date('Y-m-d H-i-s');
@@ -89,14 +89,14 @@ class UpdateSimPhongThuy extends Command{
 	            preg_match('/<div class="point_center">([\s\S]*?)<\/div>/', $response, $output_array);
 	            $point_center = strip_tags($output_array[0]);
 	            $point_center = str_replace('Tổng điểm: ', '', $point_center);
+	            $point_center_arr = explode(' / ', $point_center);
+	            $point =  @$point_center_arr[0];
 	            $end = date('Y-m-d H-i-s');
-
-	            echo "123";
-	               $info->update([
-		              'content'=>$detail_replace_current,
-		              'point_sim'=>$point_center,
-		              'seo_description'=>$start.' + '.$end
-		          ]);
+               	$info->update([
+	              'content'=>$detail_replace_current,
+	              'point_sim'=>$point,
+	              // 'seo_description'=>$start.' + '.$end
+	          	]);
 	        }catch (\Exception $e) {
 			echo	$e->getMessage();   
 			}

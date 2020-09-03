@@ -30,12 +30,22 @@
     --red-color: #ea3232;
     --black-color:#282828;
 }
+body .mainmanu .level_0>a{
+    padding: 9px 6px 9px;
+    min-width: 74px;
+}
+.fillter_categories_label .scroll_manu {
+    overflow-y: scroll;
+}
+.fillter_categories_label .wrapper_head {
+    max-height: 370px;
+}
 .sub_block {
     margin: 0 0 20px;
 }
 .sim-phong-thuy .fillter_categories_label {
     position: relative;
-    /* border: 2px solid #b97613; */
+        padding-top: 10px;
     background: #fff;
 }
 .sim-phong-thuy .fillter_categories_label {
@@ -47,12 +57,105 @@
     padding-bottom: 1px;
     box-sizing: border-box;
 }
+.tr_sim_point .point_feng {
+    color: #fff;
+    background: #F44336;
+    padding: 2px 5px;
+    border-radius: 15px;
+    border: 2px dotted #f39595;
+    box-shadow: 1px 1px 2px 2px #e8e8e8;
+    font-size: 14px;
+    display: inline-block;
+}
+.sim-phong-thuy .filter_item{
+        padding: 5px 0px;
+}
+.top_sim_fengshui td, .top_sim_fengshui th {
+    border-right: 1px solid #E1E1E1;
+    border-left: 1px solid #E1E1E1;
+}
+.top_sim_fengshui td {
+    padding: 2px 0px 2px;
+}
 .manu_item:first-child, .filter_item:first-child, .excludes_item_0:first-child {
     border-top: unset;
 }
+.feng_cb {
+    text-align: center;
+}
+h1 {
+    color: var(--main-color);
+    font-size: 20px;
+}
+ .pos_fengshui .form table #sodienthoai{
+    width: 100% !important
+ }
 .sim-phong-thuy .filter_item,.sim-phong-thuy .manu_item,.sim-phong-thuy .length_item
 ,.sim-phong-thuy .years_item,.sim-phong-thuy .excludes_item,.sim-phong-thuy .prices_item{
     width: 100% !important
+}
+.ngu_hanh {
+    padding: 14px;
+    background: #fff;
+    margin-bottom: 20px;
+    border: 2px solid var(--main-color);
+}
+.content_result .point_center {
+    text-shadow: 1px 1px 1px #ffc900;
+    color: #fb0000;
+    font-size: 16px;
+    font-weight: bold;
+    opacity: 0.8;
+    padding: 10px;
+    text-align: center;
+}
+.submitbt1 {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #d43f3a;
+    background-color: #d9534f;
+    color: #fff !important;
+    margin: 0 5px 3px 0;
+    box-shadow: 0px 1px 6px #000;
+    display: inline-block;
+    text-shadow: 0px 1px 3px #000;
+    margin-top: 8px;
+}
+.content_result .text-back-d {
+    font-size: 24px;
+    color: #fff;
+    background: #ff1100;
+    padding: 7px 18px;
+    border-radius: 30px;
+    border: 2px dotted #d0b48f;
+    display: inline-block;
+}
+.buy_detail {
+    text-align: center;
+}
+.buy_detail a {
+    background-color: #4CAF50;
+    font-size: 18px;
+    padding: 4px 11px;
+    color: #fff;
+    text-decoration: none;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.pos_fengshui1 {
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+}
+body .sim-phong-thuy .fillter_categories_label .scroll_manu{
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 .sim-phong-thuy .fillter_categories_label .filter_item a {
     position: relative;
@@ -64,6 +167,7 @@
     color: #005064;
     font-weight: bold;
     transition: 0.5s all ease;
+        padding-top: 0;
     -webkit-transition: 0.5s all ease;
 }
 .main_wrapper.simphongthuy {

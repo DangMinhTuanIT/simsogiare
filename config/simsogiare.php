@@ -8,6 +8,11 @@ return [
         3=>'Đã giao hàng',
         4=>'Đã hủy bỏ',
     ],
+    'type_sidebar'=>[
+        1=>'SIM TẠO ĐẲNG CẤP',
+        2=>'SIM GÂY ẤN TƯỢNG',
+        3=>'SIM SINH MAY MẮN',
+    ],
     'status_category_network'=>[
         1=>'Active',
         2=>'Inactive',

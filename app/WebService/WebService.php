@@ -39,6 +39,119 @@ class WebService {
     public function amp_html($html){
       return \App\myHelper::ampify($html);
     }
+    public function get_sidebar_simphongthuy_hop_menh(){
+      $items = DB::table('sim_fate')->where('status',1)->orderBy('weight','asc')->get();
+      $html='';
+      $html.='<div class="sims_categories sub_block" id="sims_group_3">
+         <div class="sub_block_title cat_title_block" data-id="id_fengshui_1" id="sub_block_title">
+            <div class="normal"><span>Sim hợp mệnh</span></div>
+         </div>
+         <div class="fillter_categories_label" id="id_fengshui_1">
+            <div class="wrapper_head scroll_manu">';
+            if(count($items)>0){
+              foreach ($items as $key => $item) {
+                $href = route('home.sim_phong_thuy_filter',array($item->slug));
+                $html.='<div class="filter_item ">
+                  <div class="filter_item_inner">
+                     <a href="'.$href.'" title="'.$item->name_sim_fate.'" class="feng_1">
+                        <!-- <span class=check_box></span> -->
+                        <span>'.$item->name_sim_fate.'</span>
+                     </a>
+                  </div>
+               </div>';
+              }
+            }
+              $html.= '
+            </div>
+            <div class="clear"></div>
+         </div>
+         <!-- end .sims_categories_label  -->
+         <div class="clear"></div>
+      </div>';
+      return $html;
+    }
+    public function get_sidebar_simphongthuy_hop_tuoi(){
+      $items = DB::table('sim_age')->where('status',1)->orderBy('weight','asc')->get();
+      $html='';
+      $html.='<div class="sims_categories sub_block" id="sims_group_3">
+         <div class="sub_block_title cat_title_block" data-id="id_fengshui_1" id="sub_block_title">
+            <div class="normal"><span>Sim hợp Tuổi</span></div>
+         </div>
+         <div class="fillter_categories_label" id="id_fengshui_1">
+            <div class="wrapper_head scroll_manu">';
+            if(count($items)>0){
+              foreach ($items as $key => $item) {
+                $href = route('home.sim_phong_thuy_filter',array($item->slug));
+                $html.='<div class="filter_item ">
+                  <div class="filter_item_inner">
+                     <a href="'.$href.'" title="'.$item->name_sim_age.'" class="feng_1">
+                        <!-- <span class=check_box></span> -->
+                        <span>'.$item->name_sim_age.'</span>
+                     </a>
+                  </div>
+               </div>';
+              }
+            }
+              $html.= '
+            </div>
+            <div class="clear"></div>
+         </div>
+         <!-- end .sims_categories_label  -->
+         <div class="clear"></div>
+      </div>';
+      return $html;
+    }
+    public function get_sidebar_simphongthuy_hop_namsinh(){
+      $items = DB::table('sim_year')->where('status',1)->orderBy('id','desc')->get();
+      $html='';
+      $html.='<div class="sims_categories sub_block" id="sims_group_3">
+         <div class="sub_block_title cat_title_block" data-id="id_fengshui_1" id="sub_block_title">
+            <div class="normal"><span>Sim hợp Năm Sinh</span></div>
+         </div>
+         <div class="fillter_categories_label" id="id_fengshui_1">
+            <div class="wrapper_head scroll_manu">';
+            if(count($items)>0){
+              foreach ($items as $key => $item) {
+                $href = route('home.sim_phong_thuy_filter',array($item->slug));
+                $html.='<div class="filter_item ">
+                  <div class="filter_item_inner">
+                     <a href="'.$href.'" title="'.$item->name_sim_year.'" class="feng_1">
+                        <!-- <span class=check_box></span> -->
+                        <span>'.$item->name_sim_year.'</span>
+                     </a>
+                  </div>
+               </div>';
+              }
+            }
+              $html.= '
+            </div>
+            <div class="clear"></div>
+         </div>
+         <!-- end .sims_categories_label  -->
+         <div class="clear"></div>
+      </div>';
+      return $html;
+    }
+    //
+    public function get_bottom_related_simphongthuy(){
+      $html='';
+      $items = DB::table('sim_year')->where('status',1)->orderBy('weight','desc')->get();
+      if(count($items)>0):
+      $html.=' <div class="pos_fengshui1">
+                     <div class="block_fengshui pos_fengshui1 clearfix">
+                        <div class="fengshui_year">';
+                        foreach ($items as $key => $item) {
+                          $href = route('home.sim_phong_thuy_filter',array($item->slug));
+                         $html.= '<a href="'.$href.'" title="'.$item->name_sim_year.'">'.$item->name_sim_year.'</a>';
+                        }
+                           
+                           $html.='
+                        </div>
+                     </div>
+                  </div>';
+                  endif;
+                  return $html;
+    }
     public function sim_phong_thuy($id_sim){
       $info = Sim::find($id_sim);
       $client = new Client();
@@ -75,11 +188,7 @@ class WebService {
                   $detail_replace = str_replace($content_image[1][$k],'/'.$image_current,$detail_replace);
                   $detail_replace_current = preg_replace($patterns, '/'.$image_current, $detail_replace);
               }
-
-              
-              
           }
-          
           // diem so cua sim theo nam
           $point_center = $crawler->filter('.point_center .text-back-d')->eq('0')->html();
           $info->update([
@@ -88,6 +197,98 @@ class WebService {
           ]);
         }
     }
+    public function get_data_simphongthuy($data,$type=''){
+      $html='';
+      $html.=' <div class="div_sim">
+                 <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                    <tbody>
+                       <tr class="tr_header_sim" align="center">
+                       </tr>
+                       <tr class="tr_header_sim" align="center">
+                          <th class="th_stt">
+                             <div class="stt"><strong>Stt</strong></div>
+                          </th>
+                          <th>
+                             <div class="number">
+                                Số sim
+                             </div>
+                          </th>
+                          <th nowrap="nowrap">
+                             <div class="price">
+                                <span class="table_title_threshold_pr"><span>Giá bán</span></span>
+                             </div>
+                          </th>
+                          <th nowrap="nowrap" class="manu_mb">
+                             <div class="manu"><strong>Mạng</strong></div>
+                          </th>
+                          <th nowrap="nowrap">
+                             <div class="manu"><strong>Điểm</strong></div>
+                          </th>
+                          <th nowrap="nowrap">
+                             <div class="category"><strong>Diễn giải</strong></div>
+                          </th>
+                          <th nowrap="nowrap" class="manu_mb">
+                             <div class="category"><strong>Mua ngay</strong></div>
+                          </th>
+                       </tr>';
+                       if(count($data)>0):
+                         $i=0;
+                        foreach ($data as $key => $item) {
+                           $i++;
+                   $number_sim_tring = $item->number_sim_tring;
+                    $sim_int = $item->number_sim;
+                     $genre =  (self::get_name_regex_genre($item->id_genre_min));
+                     // check thể loại sim
+                     $regex = $genre->regex;
+                     $number_sim_tring = \App\myHelper::check_regex_number_string($regex,$sim_int,$number_sim_tring);
+                        $image_cat = $item->image_cat;
+                       // lay the loai sim
+                  // check bg_0
+                  $bg = $i%2==1 ? 'bg_1' : 'bg_0'; 
+                  $diengiai = route('home.diengiai_simphongthuy',array($sim_int,$type));
+                  $href = route('single_sim.list',$sim_int);
+                       $html.='<tr class="tr_sim bg_0" align="center">
+                          <td class="item_stt">
+                             <div>1</div>
+                          </td>
+                          <td class="item_number" align="left">
+                             <div>
+                                <a class="modal" href="'.$href.'" rel="">'.$number_sim_tring.'</a>
+                             </div>
+                          </td>
+                          <td class="price" align="right">
+                             <div>
+                                <span>'.myHelper::convert_money($item->price).'</span>
+                             </div>
+                          </td>
+                          <td class="tr_sim manu_mb color_4">
+                             <span class="image" style="background: url(/uploads/'.$image_cat.') no-repeat center center;background-size: contain;"></span>
+                          </td>
+                          <td class="tr_sim_point" align="right">
+                             <span class="point_feng">'.$item->point_sim.'/10 điểm</span>
+                          </td>
+                          <td>
+                             <div class="view_pt_area">
+                                <a href="'.$diengiai.'" title="Xem điểm phong thủy" class="view_pt">
+                                <span>Xem diễn giải</span>
+                                </a>
+                             </div>
+                          </td>
+                          <td class="tr_buy_now">
+                             <a href="'.$href.'" title="'.$sim_int.'">Mua sim</a>
+                          </td>
+                       </tr>';
+                        }
+
+                       endif;
+                       
+          $html.='</tbody>
+                 </table>
+              </div>';
+              $html.=$data->links();
+      return $html;
+    }
+    // end sim phong thuy
     public function get_slug_page($id_page){
         $slug = '';
         $page = Page::find($id_page);
@@ -353,7 +554,7 @@ class WebService {
                 <span class="stitle">Đầu số:</span>';
             if(!empty($items)){
               foreach ($items as $value) {
-                $href = route('category.list_slug2',array($slug1,$slug2,$value->slug,$slug4));
+                $href = route('category.list_slug4',array($slug1,$slug2,$value->slug,$slug4));
                $active =  (strpos($slug3,$value->slug) !== false) ? 'active_rm' : '';
              
                 $html.='<a href="'.$href.'" class="'.$active.'" title="'.$value->number_section.'">'.$value->number_section.'</a>';
@@ -434,7 +635,7 @@ $items = DB::table('sim_price_range')->orderBy('weight','asc')->get();
     public function dauso($slug_cat="",$id_category="",$slug2=''){
       $html='';
       if($id_category>0){
-        $items = DB::table('sim_section')->where('id_category',$id_category)->where('status',1)->orderBy('weight','asc')->get();
+        $items = DB::table('sim_section')->where('id_category',$id_category)->where('parent_id','!=',0)->where('status',1)->orderBy('weight','asc')->get();
         $html.='<div class="view_search_more"><div class="title"><span></span>Xem thêm</div><div class="sims_tags"><span>';
             if(!empty($items)){
               foreach ($items as $value) {
@@ -863,11 +1064,7 @@ $items = DB::table('sim_price_range')->orderBy('weight','asc')->get();
               <!-- end .sims_categories_label -->
               <div class="clear"></div>
            </div>';
-           $arr_sidebar = array(
-                            'sim_tao_thuong_hieu'=>'Sim Tạo Thương Hiệu',
-                            'sim_vip_doanh_nhan'=>'Sim Vip Doanh Nhân',
-                            'sim_sinh_tai_loc'=>'Sim Sinh Tài Lộc',
-                            );
+           $arr_sidebar = config('simsogiare.type_sidebar');
            foreach ($arr_sidebar as $key => $item_sidebar) {
              
                 $items_genre = DB::table('sim_genre')->where('type_sidebar',$key)->orderBy('weight')->get();
@@ -965,7 +1162,7 @@ $items = DB::table('sim_price_range')->orderBy('weight','asc')->get();
             if($discount=='discount'):
              $html.='
              <li class="tr_sim tr_next">
-                <a class="modal" href="sim-giam-gia.html" rel="" title="Xem thêm">
+                <a class="modal" href="" rel="" title="Xem thêm">
                    Xem thêm 
                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20" height="20" viewBox="0 0 284.936 284.936" style="enable-background:new 0 0 284.936 284.936;" xml:space="preserve">
                       <g>
